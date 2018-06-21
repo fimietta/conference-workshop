@@ -10,6 +10,7 @@ Router.map(function() {
   this.route('home');
   this.route('agenda');
   this.route('speakers');
+  this.route('tickets');
 });
 
 export default Router;
