@@ -1,1 +1,11 @@
-{{outlet}}
+<h2 class="title">Agenda</h2>
+<div class="content">
+  {{#each model as |agenda|}}
+    <ul class='agenda'>
+      <li class='agenda-time'>{{agenda.time}}</li>
+      <li class='agenda-speaker'>{{agenda.speaker}}</li>
+      <li class='agenda-title'>{{agenda.title}}</li>
+      <li class='agenda-description'>{{agenda.description}}</li>
+    </ul>
+  {{/each}}
+</div>

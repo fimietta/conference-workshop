@@ -1,0 +1,24 @@
+.agenda {
+  list-style: none;
+  margin-top: 36px;
+}
+
+.agenda:first-child {
+  margin-top: 0;
+}
+
+.agenda li {
+  margin-top: 10px;
+}
+
+.agenda-time {
+  font-weight: bold;
+}
+
+.agenda-speaker {
+  font-style: italic;
+}
+
+.agenda-title {
+  color: #4da6ff;
+}
