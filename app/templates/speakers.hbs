@@ -1,2 +1,9 @@
 <h2 class="title">Speakers</h2>
-{{outlet}}
+<div class="content">
+  {{#each model as |speaker|}}
+    <ul class='agenda'>
+      <li class='agenda-speaker'>{{speaker.name}}</li>
+      <li class='agenda-description'>{{speaker.description}}</li>
+    </ul>
+  {{/each}}
+</div>
