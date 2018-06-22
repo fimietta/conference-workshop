@@ -1,7 +1,175 @@
 # conference-workshop
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This a simple Ember demo app to manage a conference.
+
+The app has four pages:
+
+ * home
+ * agenda
+ * speakers
+ * tickets.
+
+## How to replicate this app
+After Ember has been installed in your environment, the first step is to create
+a new ember application with the command:
+
+`ember new conference-workshop`
+
+Then move to the new created folder:
+
+`cd conference-workshop`
+
+### Set up routes
+
+If you want to visit a specific page on your application is a requirement to create a route.
+
+Ember has *generators* that automate the boilerplate code for
+common tasks such as creating components, routes and tests.
+
+To create a route just run this command:
+
+`ember generate route home`
+
+It will automatically create a route with its template/controller and unit test.
+The application also needs to know that there is a new route for the url address /home, this is done by adding an entry to the route:
+
+```javascript
+Router.map(function() {
+  this.route('agenda');
+});
+```
+
+Repeat this process for every page of your app:
+
+`ember generate route agenda`
+
+`ember generate route speakers`
+
+`ember generate route tickets`
+
+After all these command, your router has been accordingly updated:
+
+```javascript
+Router.map(function() {
+  this.route('home');
+  this.route('agenda');
+  this.route('speakers');
+  this.route('tickets');
+});
+```
+
+### Create the agenda page
+
+First of all, a new model for the agenda route should be created.
+
+Open the file on `/app/routes/agenda.js` and add what is called the *model hook*:
+
+```javascript
+export default Route.extend({
+
+  model() {
+    return [
+      {
+        id: 1,
+        time: '09:00',
+        speaker: 'Daniela Remogna',
+        title: 'Ember JS Framework',
+        description: 'Ember.js is an open-source JavaScript web framework….',
+     },
+     {
+       id: 2,
+       time: '09:35',
+       speaker: 'John Smith',
+       title: AngularJS Framework',
+     },
+   ];
+  },
+});
+```
+
+The term *hook* is used for methods that are automatically called by the framework.
+This method is not meant to be called directly from the code. 
+It's a promise-aware method, as it waits that a model is fetched from the server.
+Usually in this method there is an AJAX call to a specific API endpoint, for the sake of simplicity, the example
+is just returning an array of agenda's objects.
+
+After the model has been set up, the next step is to build the layout of the agenda page.
+
+Open the file `/app/templates/agenda.hbs`:
+
+```html
+<h2 class="title">Agenda</h2>
+
+<div class="content">
+{{#each model as |agenda|}}
+  <ul class='agenda'>
+    <li class='a-time'>{{agenda.time}}</li>
+    <li class='a-speaker'>{{agenda.speaker}}</li>
+    <li class='a-title'>{{agenda.title}}</li>
+    <li class='a-desc'>{{agenda.description}}</li>
+  </ul>
+{{/each}}
+</div>
+
+```
+### Build the main menu
+
+Open the file `/app/template/application.hbs`:
+
+The main menu lives on the application's template that it's shared between all the child routes.
+The most important thing is that the {{outlet}} is not deleted because it is the placeholder for
+rendering the child routes.
+
+The `link-to` component has been used to create links between routes.
+
+```html
+<ul class='menu'>
+  <li>{{#link-to 'home'}} Home {{/link-to}} </li>
+  <li>{{#link-to 'agenda'}} Agenda {{/link-to}}</li>
+  <li>{{#link-to 'speakers'}} Speakers {{/link-to}}</li>
+  <li>{{#link-to 'tickets'}} Tickets {{/link-to}}</li>
+</ul>
+<h1 class='header'>Front End Framework Conference</h1>
+
+{{outlet}} {{! -- this is a placeholder for rendering the child view --}}
+```
+
+### Generate a component
+
+For the tickets page a simple component has been created with the command:
+
+`ember generate component buy-ticket`
+
+It will create the component file with its template and test.
+
+The component logic is simple: it is just an input field and a buy button.
+When the user clicks on buy, an action is triggered and a simple alert message is shown.
+
+Open `/app/templates/components/buy-ticket.hbs`:
+
+```html
+{{input placeholder='Enter Name' value=name}}
+<button class='buy' {{action 'buy' name}}>BUY TICKET</button>
+
+<p>You are buying a ticket for: {{name}}</p>
+```
+
+The action handler will live in the component file:
+
+```javascript
+import Component from '@ember/component';
+
+export default Component.extend({
+  name: '',
+
+  actions: {
+    buy(name) {
+      alert(`${name} bought a ticket`);
+    }
+  }
+});
+```
+
 
 ## Prerequisites
 
