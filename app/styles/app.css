@@ -1,3 +1,21 @@
+body {
+  font-family: 'Arial';
+}
+
+h2.title {
+  margin-bottom: 0;
+  margin-left: 16px;
+}
+
+.responsive {
+  width: 100%;
+}
+
+.content {
+  max-width: 1024px;
+  padding: 16px;
+}
+
 .menu {
   list-style-type: none;
   margin: 0;
