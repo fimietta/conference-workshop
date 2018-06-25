@@ -9,7 +9,38 @@ The app has four pages:
  * speakers
  * tickets.
 
-## How to replicate this app
+ ## Prerequisites
+
+You will need the following things properly installed on your computer.
+
+* [Git](https://git-scm.com/)
+* [Node.js](https://nodejs.org/) (with NPM)
+* [Ember CLI](https://ember-cli.com/)
+* [Google Chrome](https://google.com/chrome/)
+
+
+## How to run this app
+* `git clone <repository-url>` this repository
+* `cd conference-workshop`
+* `npm install`
+
+## Running / Development
+
+* `ember serve`
+* Visit your app at [http://localhost:4200](http://localhost:4200).
+* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+
+### Running Tests
+
+* `ember test`
+* `ember test --server`
+
+### Building
+
+* `ember build` (development)
+* `ember build --environment production` (production)
+
+## Tutorial: how to replicate this app
 After Ember has been installed in your environment, the first step is to create
 a new ember application with the command:
 
@@ -21,7 +52,7 @@ Then move to the new created folder:
 
 ### Set up routes
 
-If you want to visit a specific page on your application is a requirement to create a route.
+If you want to visit a specific page on your application it is a requirement to create a route.
 
 Ember has *generators* that automate the boilerplate code for
 common tasks such as creating components, routes and tests.
@@ -31,7 +62,7 @@ To create a route just run this command:
 `ember generate route home`
 
 It will automatically create a route with its template/controller and unit test.
-The application also needs to know that there is a new route for the url address /home, this is done by adding an entry to the route:
+The application also needs to know that there is a new route for the url address `/home`, this is done by adding an entry to the route:
 
 ```javascript
 Router.map(function() {
@@ -60,14 +91,15 @@ Router.map(function() {
 
 ### Create the agenda page
 
-First of all, a new model for the agenda route should be created.
+First of all, the agenda route should fetch the model.
 
-Open the file on `/app/routes/agenda.js` and add what is called the *model hook*:
+Open the file on `/app/routes/agenda.js` and add to the Route class a special method called the *model hook*:
 
 ```javascript
 export default Route.extend({
 
   model() {
+    // or return `$.get('http://www.yourdomain.com/api/agenda')`
     return [
       {
         id: 1,
@@ -81,21 +113,30 @@ export default Route.extend({
        time: '09:35',
        speaker: 'John Smith',
        title: AngularJS Framework',
-     },
-   ];
-  },
+       },
+      ];
+    },
 });
 ```
 
 The term *hook* is used for methods that are automatically called by the framework.
-This method is not meant to be called directly from the code. 
-It's a promise-aware method, as it waits that a model is fetched from the server.
-Usually in this method there is an AJAX call to a specific API endpoint, for the sake of simplicity, the example
-is just returning an array of agenda's objects.
+This method is not meant to be called directly from the code.
+It's a *promise-aware* method, as it waits that a model is fetched from the server.
+Usually in this method there is an AJAX call to a specific API endpoint (like `$.get('http://www.yourdomain.com/api/agenda')`), for the sake of simplicity, the example is just returning an array of agenda's object.
 
-After the model has been set up, the next step is to build the layout of the agenda page.
+
+The next step is to build the layout of the agenda page.
 
 Open the file `/app/templates/agenda.hbs`:
+
+This file contains html code binded to your model data.
+
+On the template you can use the context variable *model* to access to the data returned by the model() method.
+To loop over every agenda item, the *each* handlebar helper it is used.
+On the pipe `|agenda|` a local variable available on the each body is created and it represents the current object in the iteration process.
+
+If something change with your binded data, the template is rendered automatically.
+You don't have to worry about that.
 
 ```html
 <h2 class="title">Agenda</h2>
@@ -116,8 +157,9 @@ Open the file `/app/templates/agenda.hbs`:
 
 Open the file `/app/template/application.hbs`:
 
-The main menu lives on the application's template that it's shared between all the child routes.
-The most important thing is that the {{outlet}} is not deleted because it is the placeholder for
+The main menu lives on the application's template that it's always visible as it's shared between all the child routes.
+This is a good candidate for hosting your header, main navigation and footer.
+The most important thing is that the `{{outlet}}` is not deleted because it is the placeholder for
 rendering the child routes.
 
 The `link-to` component has been used to create links between routes.
@@ -145,6 +187,10 @@ It will create the component file with its template and test.
 The component logic is simple: it is just an input field and a buy button.
 When the user clicks on buy, an action is triggered and a simple alert message is shown.
 
+Actions in Ember are used to handle user interactions.
+An action can be added on a template by using the helper {{action 'actionName' [param1, paramN]}}
+The default dom triggered event is click.
+
 Open `/app/templates/components/buy-ticket.hbs`:
 
 ```html
@@ -153,8 +199,10 @@ Open `/app/templates/components/buy-ticket.hbs`:
 
 <p>You are buying a ticket for: {{name}}</p>
 ```
+The next step is to bind the action on the template with the component.
 
-The action handler will live in the component file:
+All the actions handled by a component live on actions object.
+In this example, it's necessary to add a new method called `buy`:
 
 ```javascript
 import Component from '@ember/component';
@@ -170,45 +218,12 @@ export default Component.extend({
 });
 ```
 
+The last step is to render the component under the tickets.hbs template.
 
-## Prerequisites
+```html
+{{buy-ticket}}
+```
 
-You will need the following things properly installed on your computer.
-
-* [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org/) (with NPM)
-* [Ember CLI](https://ember-cli.com/)
-* [Google Chrome](https://google.com/chrome/)
-
-## Installation
-
-* `git clone <repository-url>` this repository
-* `cd conference-workshop`
-* `npm install`
-
-## Running / Development
-
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
-
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
-
-### Running Tests
-
-* `ember test`
-* `ember test --server`
-
-### Building
-
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
 
 ## Further Reading / Useful Links
 
