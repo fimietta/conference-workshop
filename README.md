@@ -62,7 +62,7 @@ To create a route just run this command:
 `ember generate route home`
 
 It will automatically create a route with its template/controller and unit test.
-The application also needs to know that there is a new route for the url address `/home`, this is done by adding an entry to the route:
+The application also needs to know that there is a new route for the url address `/home`, this is done by adding an entry to the router:
 
 ```javascript
 Router.map(function() {
@@ -113,9 +113,9 @@ export default Route.extend({
        time: '09:35',
        speaker: 'John Smith',
        title: AngularJS Framework',
-       },
-      ];
-    },
+     },
+    ];
+   },
 });
 ```
 
@@ -131,9 +131,10 @@ Open the file `/app/templates/agenda.hbs`:
 
 This file contains html code binded to your model data.
 
-On the template you can use the context variable *model* to access to the data returned by the model() method.
-To loop over every agenda item, the *each* handlebar helper it is used.
-On the pipe `|agenda|` a local variable available on the each body is created and it represents the current object in the iteration process.
+Ember.js has created a controller for us and set the controller's **model** property to our route's model. 
+The template loops over the controller's model property by using handlebar each helper.
+
+On the pipe `|agenda|` a local variable available on the `each body` is created and it represents the current object in the iteration process.
 
 If something change with your binded data, the template is rendered automatically.
 You don't have to worry about that.
@@ -163,6 +164,8 @@ The most important thing is that the `{{outlet}}` is not deleted because it is t
 rendering the child routes.
 
 The `link-to` component has been used to create links between routes.
+When this is going to be compiled a list with `<a tag` will be generated.
+We cannot use an a tag from the beginning because this will be handled by the browser and it will cause a full page reload.
 
 ```html
 <ul class='menu'>
@@ -182,13 +185,13 @@ For the tickets page a simple component has been created with the command:
 
 `ember generate component buy-ticket`
 
-It will create the component file with its template and test.
+Also in this case, ember cli creates the component javascript file with its template and test.
 
 The component logic is simple: it is just an input field and a buy button.
 When the user clicks on buy, an action is triggered and a simple alert message is shown.
 
 Actions in Ember are used to handle user interactions.
-An action can be added on a template by using the helper {{action 'actionName' [param1, paramN]}}
+An action can be added to a DOM element on the template by using the helper {{action 'actionName' [param1, paramN]}}
 The default dom triggered event is click.
 
 Open `/app/templates/components/buy-ticket.hbs`:
